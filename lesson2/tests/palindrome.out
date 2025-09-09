@@ -1,0 +1,21 @@
+Cfg for function: main
+{"dest": "ten", "op": "const", "type": "int", "value": 10} -> ['for.cond']
+for.cond -> ['for.body', 'for.end']
+for.body -> ['if.true', 'if.false']
+if.true -> ['for.cond']
+if.false -> ['for.cond']
+for.end -> []
+Cfg for function: pow
+{"dest": "res", "op": "const", "type": "int", "value": 1} -> ['for.cond.pow']
+for.cond.pow -> ['for.body.pow', 'for.end.pow']
+for.body.pow -> ['if.true.pow', 'if.false.pow']
+if.true.pow -> ['for.cond.pow']
+if.false.pow -> ['for.cond.pow']
+for.end.pow -> []
+Cfg for function: palindrome
+{"dest": "is_palindrome", "op": "const", "type": "bool", "value": false} -> ['if.true.palindrome', 'if.false.palindrome']
+if.true.palindrome -> ['if.end.palindrome']
+if.false.palindrome -> ['if.true.mirror', 'if.false.mirror']
+if.true.mirror -> ['if.end.palindrome']
+if.false.mirror -> ['if.end.palindrome']
+if.end.palindrome -> []

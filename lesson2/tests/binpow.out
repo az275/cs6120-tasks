@@ -1,0 +1,10 @@
+Cfg for function: main
+{"dest": "acc", "op": "const", "type": "int", "value": 1} -> []
+Cfg for function: is_even
+{"dest": "two", "op": "const", "type": "int", "value": 2} -> []
+Cfg for function: bin_pow
+{"dest": "zero", "op": "const", "type": "int", "value": 0} -> ['then.0', 'else.0']
+then.0 -> []
+else.0 -> ['then.1', 'else.1']
+then.1 -> []
+else.1 -> []
