@@ -7,14 +7,28 @@ from tdce import form_basic_blocks
 COMMUTATIVE_OPS = ['add', 'mul', 'eq', 'and', 'or']
 EFFECT_OPS = ['call', 'print', 'ret', 'br', 'jmp', 'store']
 
+def track_overwritten(instrs):
+    res = [1] * len(instrs)
+    seen = set()
+
+    for i in range(len(instrs) - 1, -1, -1):
+        dest = instrs[i].get('dest')
+        if dest and dest not in seen:
+            res[i] = 0
+            seen.add(dest)
+
+    return res
+
 def lvn(block):
     table = {}       # value tuple -> value number
     var2num = {}     # variable name -> value number
     num2var = {}     # value number -> canonical variable name
     value_number = 0
     new_block = []
+    overwritten=track_overwritten(block)
+    fresh_var = 0
 
-    for instr in block:
+    for i, instr in enumerate(block):
         args = instr.get('args', [])
         canonized_args = [num2var.get(var2num.get(arg, arg), arg) for arg in args]
 
@@ -27,7 +41,7 @@ def lvn(block):
         dest = instr.get('dest')
 
         if op == 'const':
-            value = ('const', instr['value'])
+            value = ('const', instr['type'], instr['value'])
         elif op in COMMUTATIVE_OPS:
             value = (op,) + tuple(sorted(canonized_args))
         else:
@@ -56,10 +70,16 @@ def lvn(block):
                 new_instr['args'] = canonized_args
 
             if dest:
-                new_instr['dest'] = dest
-                new_instr['type'] = instr['type']
-                var2num[dest] = value_number
-                num2var[value_number] = dest
+                if overwritten[i]:
+                    var = f"{dest}.lvn{fresh_var}"
+                    fresh_var += 1
+                else:
+                    var = dest
+
+            new_instr['dest'] = var
+            new_instr['type'] = instr['type']
+            var2num[dest] = value_number
+            num2var[value_number] = var
 
             new_block.append(new_instr)
             value_number += 1
