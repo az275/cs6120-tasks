@@ -3,7 +3,7 @@ import sys
 
 from build_cfg import form_basic_blocks, form_cfg, label2block
 
-def worklist(cfg, block_instructions, merge, transfer):
+def worklist(cfg, block_map, merge, transfer):
     worklist = list(cfg.keys())
     in_map = {block: set() for block in cfg} # label -> (var, label)
     out_map = {block: set() for block in cfg} # label -> (var, label)
@@ -23,7 +23,7 @@ def worklist(cfg, block_instructions, merge, transfer):
             merged = set()
 
         in_map[block] = merged
-        new_out = transfer(block, block_instructions[block], in_map[block])
+        new_out = transfer(block, block_map[block], in_map[block])
 
         if new_out != out_map[block]:
             out_map[block] = new_out
@@ -34,11 +34,11 @@ def worklist(cfg, block_instructions, merge, transfer):
 def reaching_def_merge(pred_outs):
     return set().union(*pred_outs)
 
-def reaching_def_transfer(block_label, instructions, input_defs):
+def reaching_def_transfer(block_label, instrs, input_defs):
     defs = set()
     kill = set()
 
-    for instr in instructions:
+    for instr in instrs:
         if 'dest' in instr:
             for defn in input_defs:
                 if defn[0] == instr['dest']:
