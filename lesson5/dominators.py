@@ -51,18 +51,22 @@ def build_dominator_tree(dominators, entry):
 def find_dominance_frontier(cfg, entry):
     dominators = get_dominators(cfg, entry)
     idoms = get_immediate_dominators(dominators, entry)
-    preds = get_preds(cfg)
+    dominator_tree = build_dominator_tree(dominators, entry)
     df = {block: set() for block in cfg} # block -> set of blocks
 
     for block in cfg:
-        if block == entry:
-            continue
-        for pred in preds[block]:
-            current = pred
-            while current and current != block and current != idoms.get(block):
-                df[current].add(block)
-                current = idoms.get(current)
+        for succ in cfg.get(block, []):
+            if block != succ and idoms.get(succ) != block:
+                df[block].add(succ)
 
+    def postorder_df(block):
+        for child in dominator_tree.get(block, []):
+            postorder_df(child)
+            for e in df[child]:
+                if block != e and idoms.get(e) != block:
+                    df[block].add(e)
+
+    postorder_df(entry)
     return df
 
 
