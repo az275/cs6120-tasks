@@ -1,17 +1,21 @@
 Function: main
+
 Dominators [block -> set of blocks]:
 Passed correctness check
 .entry -> {'.entry'}
 while.cond -> {'.entry', 'while.cond'}
-while.body -> {'.entry', 'while.body', 'while.cond'}
-while.finish -> {'.entry', 'while.cond', 'while.finish'}
+while.body -> {'while.body', '.entry', 'while.cond'}
+while.finish -> {'while.finish', '.entry', 'while.cond'}
+
 Dominator tree:
 └── .entry
     └── while.cond
         ├── while.body
         └── while.finish
+
 Dominance frontier [block -> set of blocks]:
 .entry -> set()
 while.cond -> set()
 while.body -> {'while.cond'}
 while.finish -> set()
+

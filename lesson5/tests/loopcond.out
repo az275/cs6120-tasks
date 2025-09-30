@@ -1,12 +1,14 @@
 Function: main
+
 Dominators [block -> set of blocks]:
 Passed correctness check
 entry -> {'entry'}
 loop -> {'loop', 'entry'}
-body -> {'loop', 'body', 'entry'}
-then -> {'then', 'loop', 'body', 'entry'}
-endif -> {'endif', 'loop', 'body', 'entry'}
-exit -> {'loop', 'exit', 'entry'}
+body -> {'loop', 'entry', 'body'}
+then -> {'then', 'loop', 'entry', 'body'}
+endif -> {'loop', 'entry', 'endif', 'body'}
+exit -> {'loop', 'entry', 'exit'}
+
 Dominator tree:
 └── entry
     └── loop
@@ -14,6 +16,7 @@ Dominator tree:
         │   ├── then
         │   └── endif
         └── exit
+
 Dominance frontier [block -> set of blocks]:
 entry -> set()
 loop -> set()
@@ -21,3 +24,4 @@ body -> {'loop'}
 then -> {'endif'}
 endif -> {'loop'}
 exit -> set()
+

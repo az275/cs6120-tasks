@@ -106,6 +106,8 @@ if __name__ == "__main__":
 
     for func in prog['functions']:
         print("Function:", func['name'])
+        print()
+
         blocks = form_basic_blocks(func['instrs'])
         add_entry(blocks)
         func_cfg = form_cfg(blocks)
@@ -117,12 +119,15 @@ if __name__ == "__main__":
         print("Passed correctness check" if verify_dominators(func_cfg, dominators, entry) else "Failed correctness check")
         for block, dom in dominators.items():
             print(f"{block} -> {dom}")
+        print()
 
         print("Dominator tree:")
         dominator_tree = build_dominator_tree(dominators, entry)
         print_tree(dominator_tree, entry)
+        print()
 
         print("Dominance frontier [block -> set of blocks]:")
         dominance_frontier = find_dominance_frontier(func_cfg, entry)
         for block, frontier in dominance_frontier.items():
             print(f"{block} -> {frontier}")
+        print()
