@@ -1,0 +1,23 @@
+Function: main
+Dominators [block -> set of blocks]:
+Passed correctness check
+entry -> {'entry'}
+loop -> {'loop', 'entry'}
+body -> {'loop', 'body', 'entry'}
+then -> {'then', 'loop', 'body', 'entry'}
+endif -> {'endif', 'loop', 'body', 'entry'}
+exit -> {'loop', 'exit', 'entry'}
+Dominator tree:
+└── entry
+    └── loop
+        ├── body
+        │   ├── then
+        │   └── endif
+        └── exit
+Dominance frontier [block -> set of blocks]:
+entry -> set()
+loop -> set()
+body -> {'loop'}
+then -> {'endif'}
+endif -> {'loop'}
+exit -> set()
