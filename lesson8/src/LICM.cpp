@@ -86,8 +86,7 @@ llvmGetPassPluginInfo() {
         .RegisterPassBuilderCallbacks = [](PassBuilder &PB) {
             PB.registerPipelineStartEPCallback(
                 [](ModulePassManager &MPM, OptimizationLevel Level) {
-                    FunctionPassManager FPM;
-                    FPM.addPass(PromotePass());
+                    MPM.addPass(createModuleToFunctionPassAdaptor(PromotePass()));
                     MPM.addPass(LICMPass());
                 });
         }
